@@ -8,9 +8,9 @@ def parse_digits(line):
         if line[i].isdigit():
             yield int(line[i])
 
-        for j, name in enumerate(DIGIT_NAMES):
+        for j, name in enumerate(DIGIT_NAMES, start=1):
             if line[i:].startswith(name):
-                yield j + 1
+                yield j
 
 
 def solve_part_1(lines):
