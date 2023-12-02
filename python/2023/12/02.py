@@ -4,36 +4,38 @@ from math import prod
 CUBES = dict(red=12, green=13, blue=14)
 
 
-def parse_round(s):
-	result = {}
+def parse_handful(s):
+	handful = {}
 
-	for part in s.split(","):
-		count_str, color = part.split()
-		result[color] = int(count_str)
+	for count_color_str in s.split(","):
+		count_str, color = count_color_str.split()
+		handful[color] = int(count_str)
 
-	return result
+	return handful
 
 
 def parse_game(line):
-	id_str, rounds_str = line.split(":")
+	id_str, handfuls_str = line.split(":")
 	_, id_str = id_str.split()
-	rounds = [parse_round(s) for s in rounds_str.split(";")]
-	return int(id_str), rounds
+	id_ = int(id_str)
+
+	handfuls = [parse_handful(s) for s in handfuls_str.split(";")]
+	return id_, handfuls
 
 
-def is_possible_round(round_):
-	return all(count <= CUBES[color] for color, count in round_.items())
+def is_possible_handful(handful):
+	return all(count <= CUBES[color] for color, count in handful.items())
 
 
-def is_possible_game(rounds):
-	return all(is_possible_round(r) for r in rounds)
+def is_possible_game(handfuls):
+	return all(is_possible_handful(h) for h in handfuls)
 
 
 def get_power(game):
 	max_counts = {}
 
-	for round_ in game:
-		for color, count in round_.items():
+	for handful in game:
+		for color, count in handful.items():
 			max_counts[color] = max(count, max_counts.get(color, 0))
 
 	return prod(max_counts.values())
@@ -41,7 +43,7 @@ def get_power(game):
 
 def main():
 	games = [parse_game(line) for line in sys.stdin]
-	print(sum(id_ for id_, rounds in games if is_possible_game(rounds)))
+	print(sum(id_ for id_, handfuls in games if is_possible_game(handfuls)))
 	print(sum(get_power(game) for id_, game in games))
 
 
