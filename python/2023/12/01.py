@@ -13,22 +13,30 @@ def parse_digits(line):
                 yield str(j + 1)
 
 
-def main():
-    lines = list(sys.stdin)
+def solve_part_1(lines):
     total = 0
 
     for line in lines:
         digits = [c for c in line if c.isdigit()]
         total += int(digits[0] + digits[-1])
 
-    print(total)
+    return total
+
+
+def solve_part_2(lines):
     total = 0
 
     for line in lines:
         digits = list(parse_digits(line))
         total += int(digits[0] + digits[-1])
 
-    print(total)
+    return total
+
+
+def main():
+    lines = list(sys.stdin)
+    print(solve_part_1(lines))
+    print(solve_part_2(lines))
 
 
 if __name__ == "__main__":
