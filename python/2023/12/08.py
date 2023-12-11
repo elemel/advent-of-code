@@ -1,6 +1,7 @@
 from sys import stdin
 from math import lcm
 
+
 def parse_node(line):
     name, children_str = line.split("=")
     name = name.strip()
@@ -47,7 +48,11 @@ def main():
     print(get_distance(path, nodes, "AAA", "ZZZ"))
 
     ghost_positions = sorted(p for p in nodes.keys() if p.endswith("A"))
-    ghost_distances = [min(get_ghost_distances(path, nodes, p).values()) for p in ghost_positions]
+
+    ghost_distances = [
+        min(get_ghost_distances(path, nodes, p).values()) for p in ghost_positions
+    ]
+
     print(lcm(*ghost_distances))
 
 
