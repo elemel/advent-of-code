@@ -27,7 +27,7 @@ def neg(a):
     return -ax, -ay
 
 
-def deduce(grid, position):
+def deduce_pipe(grid, position):
     directions = set()
 
     for direction in [NORTH, SOUTH, WEST, EAST]:
@@ -44,7 +44,8 @@ def deduce(grid, position):
         if neg(direction) in PIPES[new_pipe]:
             directions.add(direction)
 
-    return {pipe for pipe in PIPES if PIPES[pipe] == directions}
+    pipes = [p for p in PIPES if PIPES[p] == directions]
+    return pipes[0] if len(pipes) == 1 else None
 
 
 def find_path(grid, start):
@@ -79,10 +80,10 @@ def is_inside(grid, path_set, position):
 def main():
     grid = {(x, y): c for y, l in enumerate(stdin) for x, c in enumerate(l.strip())}
 
-    [s] = [p for p, c in grid.items() if c == "S"]
-    [grid[s]] = deduce(grid, s)
+    [start] = [p for p, c in grid.items() if c == "S"]
+    grid[start] = deduce_pipe(grid, start)
 
-    path = find_path(grid, s)
+    path = find_path(grid, start)
     print(len(path) // 2)
 
     path_set = set(path)
