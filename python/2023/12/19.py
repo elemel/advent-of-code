@@ -2,7 +2,6 @@ from sys import stdin
 import operator
 from math import prod
 
-
 OPERATORS = {"<": operator.lt, ">": operator.gt}
 EMPTY_RANGED_PART = dict(x=range(0), m=range(0), a=range(0), s=range(0))
 
@@ -68,12 +67,15 @@ def split_ranged_part(part, condition):
     true_part = part.copy()
     false_part = part.copy()
 
+    start = part[category].start
+    stop = part[category].stop
+
     if operator_str == "<":
-        true_part[category] = range(part[category].start, rating)
-        false_part[category] = range(rating, part[category].stop)
+        true_part[category] = range(start, min(stop, rating))
+        false_part[category] = range(max(start, rating), stop)
     elif operator_str == ">":
-        true_part[category] = range(rating + 1, part[category].stop)
-        false_part[category] = range(part[category].start, rating + 1)
+        true_part[category] = range(max(start, rating + 1), stop)
+        false_part[category] = range(start, min(stop, rating + 1))
     else:
         assert False
 
