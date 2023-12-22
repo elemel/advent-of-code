@@ -1,5 +1,5 @@
 from sys import stdin
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 
 
 def parse_point(s):
