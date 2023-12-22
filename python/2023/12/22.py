@@ -65,11 +65,6 @@ def fall(bricks):
     return new_bricks, fall_count
 
 
-def is_safe_brick(bricks, i):
-    new_bricks = bricks[:i] + bricks[i + 1 :]
-    return new_bricks == fall_bricks(new_bricks)[0]
-
-
 def main():
     bricks = [parse_brick(l.strip()) for l in stdin]
 
