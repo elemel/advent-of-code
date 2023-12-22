@@ -1,4 +1,5 @@
 from sys import stdin
+from collections import defaultdict
 
 
 def parse_point(s):
@@ -11,46 +12,42 @@ def parse_brick(s):
     return a, b
 
 
-def get_brick_min_z(brick):
-    return brick[0][2]
+def generate_brick_xy_positions(brick):
+    for y in range(brick[0][1], brick[1][1] + 1):
+        for x in range(brick[0][0], brick[1][0] + 1):
+            yield x, y
+
+
+def add_3(a, b):
+    ax, ay, az = a
+    bx, by, bz = b
+
+    return ax + bx, ay + by, az + bz
+
+
+def move_brick(brick, offset):
+    a, b = brick
+    return add_3(a, offset), add_3(b, offset)
 
 
 def fall_bricks(bricks):
     new_bricks = []
-    grid = set()
+    ground = defaultdict(int)
     fall_count = 0
 
     for brick in bricks:
-        fall_distance = 0
+        xy_positions = list(generate_brick_xy_positions(brick))
+        ground_max_z = max(ground[p] for p in xy_positions)
+        fall_distance = brick[0][2] - ground_max_z - 1
 
-        while True:
-            if brick[0][2] == 1:
-                break
-
-            if any(
-                (x, y, brick[0][2] - 1) in grid
-                for y in range(brick[0][1], brick[1][1] + 1)
-                for x in range(brick[0][0], brick[1][0] + 1)
-            ):
-                break
-
-            brick = (brick[0][0], brick[0][1], brick[0][2] - 1), (
-                brick[1][0],
-                brick[1][1],
-                brick[1][2] - 1,
-            )
-
-            fall_distance += 1
+        if fall_distance:
+            brick = move_brick(brick, (0, 0, -fall_distance))
+            fall_count += 1
 
         new_bricks.append(brick)
 
-        for z in range(brick[0][2], brick[1][2] + 1):
-            for y in range(brick[0][1], brick[1][1] + 1):
-                for x in range(brick[0][0], brick[1][0] + 1):
-                    grid.add((x, y, z))
-
-        if fall_distance:
-            fall_count += 1
+        for position in xy_positions:
+            ground[position] = brick[1][2]
 
     return new_bricks, fall_count
 
@@ -63,7 +60,7 @@ def is_safe_brick(bricks, i):
 def main():
     bricks = [parse_brick(l.strip()) for l in stdin]
 
-    bricks.sort(key=get_brick_min_z)
+    bricks.sort(key=lambda b: b[0][2])
     bricks, _ = fall_bricks(bricks)
 
     print(sum(is_safe_brick(bricks, i) for i in range(len(bricks))))
