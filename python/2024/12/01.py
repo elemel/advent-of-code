@@ -2,12 +2,12 @@ from sys import stdin
 
 
 def parse_pair(line):
-    left, right = [int(token) for token in line.split()]
+    left, right = map(int, line.split())
     return left, right
 
 
 def main():
-    pairs = [parse_pair(line) for line in stdin]
+    pairs = list(map(parse_pair, stdin))
     left_list, right_list = zip(*pairs)
     print(
         sum(
