@@ -2,7 +2,7 @@ from sys import stdin
 
 
 def parse_report(line):
-    return [int(s) for s in line.split()]
+    return [int(token) for token in line.split()]
 
 
 def is_safe_report(report):
