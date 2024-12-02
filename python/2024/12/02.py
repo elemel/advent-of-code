@@ -11,8 +11,16 @@ def is_safe_report(report):
 
 
 def is_safe_report_with_damping(report):
-    damped_reports = [report[:i] + report[i + 1 :] for i in range(len(report))]
-    return is_safe_report(report) or any(map(is_safe_report, damped_reports))
+    if is_safe_report(report):
+        return True
+
+    for i in range(len(report)):
+        damped_report = report[:i] + report[i + 1 :]
+
+        if is_safe_report(damped_report):
+            return True
+
+    return False
 
 
 def main():
