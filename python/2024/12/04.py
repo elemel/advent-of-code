@@ -30,7 +30,9 @@ def match_word_cross(grid, position, word):
 
 def main():
     grid = {
-        (x, y): c for y, line in enumerate(stdin) for x, c in enumerate(line.strip())
+        (x, y): char
+        for y, line in enumerate(stdin)
+        for x, char in enumerate(line.strip())
     }
     print(
         sum(
