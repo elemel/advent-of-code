@@ -6,7 +6,9 @@ DIRECTIONS = [(dx, dy) for dy in [-1, 0, 1] for dx in [-1, 0, 1] if dx or dy]
 def match_word(grid, position, direction, word):
     x, y = position
     dx, dy = direction
-    return all(grid.get((x + i * dx, y + i * dy)) == c for i, c in enumerate(word))
+    return all(
+        grid.get((x + i * dx, y + i * dy)) == char for i, char in enumerate(word)
+    )
 
 
 def match_word_cross(grid, position, word):

@@ -5,8 +5,8 @@ from functools import cmp_to_key
 def main():
     rules_str, updates_str = stdin.read().split("\n\n")
 
-    rules = {tuple(map(int, l.split("|"))) for l in rules_str.splitlines()}
-    updates = [list(map(int, l.split(","))) for l in updates_str.splitlines()]
+    rules = {tuple(map(int, line.split("|"))) for line in rules_str.splitlines()}
+    updates = [list(map(int, line.split(","))) for line in updates_str.splitlines()]
 
     def cmp(a, b):
         return int((b, a) in rules) - int((a, b) in rules)
