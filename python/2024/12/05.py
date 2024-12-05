@@ -2,19 +2,11 @@ from sys import stdin
 from functools import cmp_to_key
 
 
-def parse_rule(s):
-    a, b = map(int, s.split("|"))
-    return a, b
-
-
-def parse_update(s):
-    return list(map(int, s.split(",")))
-
-
 def main():
     rules_str, updates_str = stdin.read().split("\n\n")
-    rules = set(map(parse_rule, rules_str.splitlines()))
-    updates = list(map(parse_update, updates_str.splitlines()))
+
+    rules = {tuple(map(int, l.split("|"))) for l in rules_str.splitlines()}
+    updates = [list(map(int, l.split(","))) for l in updates_str.splitlines()]
 
     def cmp(a, b):
         return int((b, a) in rules) - int((a, b) in rules)
