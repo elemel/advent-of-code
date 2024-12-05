@@ -19,9 +19,9 @@ def main():
                 enabled = False
 
             case _:
-                a, b = re.findall(r"\d+", instruction)
-                answer_1 += int(a) * int(b)
-                answer_2 += enabled * int(a) * int(b)
+                a, b = map(int, re.findall(r"\d+", instruction))
+                answer_1 += a * b
+                answer_2 += enabled * a * b
 
     print(answer_1)
     print(answer_2)
