@@ -71,6 +71,18 @@ class Vector2:
     def __iter__(self) -> Iterator[int]:
         return iter((self.x, self.y))
 
+    def dot(self, other: "Vector2") -> int:
+        if not isinstance(other, Vector2):
+            return NotImplemented
+
+        return self.x * other.x + self.y * other.y
+
+    def cross(self, other: "Vector2") -> int:
+        if not isinstance(other, Vector2):
+            return NotImplemented
+
+        return self.x * other.y - self.y * other.x
+
     def turn_left(self) -> "Vector2":
         return Vector2(self.y, -self.x)
 
