@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterator, Iterable
+from typing import Iterator, Iterable, Union
 from itertools import count
 
 
@@ -7,6 +7,8 @@ from itertools import count
 class Vector2:
     x: int
     y: int
+
+    ZERO = None
 
     UP = None
     LEFT = None
@@ -44,14 +46,38 @@ class Vector2:
 
         return Vector2(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, scalar: int) -> "Vector2":
-        if not isinstance(scalar, int):
+    def __mul__(self, other: Union[int, "Vector2"]) -> "Vector2":
+        if isinstance(other, int):
+            # Scalar multiplication
+            return Vector2(self.x * other, self.y * other)
+        elif isinstance(other, Vector2):
+            # Element-wise multiplication
+            return Vector2(self.x * other.x, self.y * other.y)
+        else:
             return NotImplemented
 
-        return Vector2(self.x * scalar, self.y * scalar)
+    def __rmul__(self, other: int) -> "Vector2":
+        return self.__mul__(other)
 
-    def __rmul__(self, scalar: int) -> "Vector2":
-        return self.__mul__(scalar)
+    def __floordiv__(self, other: Union[int, "Vector2"]) -> "Vector2":
+        if isinstance(other, int):
+            # Scalar floor division
+            return Vector2(self.x // other, self.y // other)
+        elif isinstance(other, Vector2):
+            # Element-wise floor division
+            return Vector2(self.x // other.x, self.y // other.y)
+        else:
+            return NotImplemented
+
+    def __mod__(self, other: Union[int, "Vector2"]) -> "Vector2":
+        if isinstance(other, int):
+            # Scalar modulus
+            return Vector2(self.x % other, self.y % other)
+        elif isinstance(other, Vector2):
+            # Element-wise modulus
+            return Vector2(self.x % other.x, self.y % other.y)
+        else:
+            return NotImplemented
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Vector2):
@@ -68,8 +94,14 @@ class Vector2:
     def __len__(self) -> int:
         return 2
 
+    def __getitem__(self, index: int) -> int:
+        return (self.x, self.y)[index]
+
     def __iter__(self) -> Iterator[int]:
         return iter((self.x, self.y))
+
+    def __bool__(self) -> bool:
+        return bool(self.x or self.y)
 
     def dot(self, other: "Vector2") -> int:
         if not isinstance(other, Vector2):
@@ -89,6 +121,11 @@ class Vector2:
     def turn_right(self) -> "Vector2":
         return Vector2(-self.y, self.x)
 
+    def sign(self) -> "Vector2":
+        return Vector2(sign(self.x), sign(self.y))
+
+
+Vector2.ZERO = Vector2(0, 0)
 
 Vector2.UP = Vector2(0, -1)
 Vector2.LEFT = Vector2(-1, 0)
@@ -136,3 +173,12 @@ def parse_grid(lines: Iterable[str]) -> dict[Vector2, str]:
         for y, line in enumerate(lines)
         for x, char in enumerate(line.strip())
     }
+
+
+def sign(i: int) -> int:
+    return -1 if i < 0 else 1 if i > 0 else 0
+
+
+def parse_ints(s: str) -> Iterable[int]:
+    s = "".join(c if c in "-0123456789" else " " for c in s)
+    return map(int, s.split())
