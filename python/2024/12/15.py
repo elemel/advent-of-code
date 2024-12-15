@@ -1,5 +1,5 @@
 from sys import stdin
-from pyule import parse_grid, Vector2
+from pyule import parse_grid, Vector2, print_grid
 
 
 MOVES = {"^": Vector2.UP, "v": Vector2.DOWN, "<": Vector2.LEFT, ">": Vector2.RIGHT}
@@ -62,19 +62,6 @@ def apply_move_part_2(grid, robot, move):
     return robot + move
 
 
-def print_grid(grid, robot):
-    grid = dict(grid)
-    grid[robot] = "@"
-
-    min_x = min(position.x for position in grid)
-    max_x = max(position.x for position in grid)
-    min_y = min(position.y for position in grid)
-    max_y = max(position.y for position in grid)
-
-    for y in range(min_y, max_y + 1):
-        print("".join(grid.get(Vector2(x, y), ".") for x in range(min_x, max_x + 1)))
-
-
 def solve_part_1(grid_str, moves):
     grid = parse_grid(grid_str.splitlines())
     [robot] = [position for position, char in grid.items() if char == "@"]
@@ -95,12 +82,15 @@ def solve_part_2(grid_str, moves):
     grid = parse_grid(grid_str.splitlines())
     [robot] = [position for position, char in grid.items() if char == "@"]
     grid[robot] = "."
-    # print_grid(grid, robot)
+
+    # print()
+    # print_grid(grid | {robot: "@"})
+    # print()
 
     for move in moves:
         robot = apply_move_part_2(grid, robot, move)
+        # print_grid(grid | {robot: "@"})
         # print()
-        # print_grid(grid, robot)
 
     return sum(100 * position.y + position.x for position, char in grid.items() if char == "[")
 

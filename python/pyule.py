@@ -182,3 +182,16 @@ def sign(i: int) -> int:
 def parse_ints(s: str) -> Iterable[int]:
     s = "".join(c if c in "-0123456789" else " " for c in s)
     return map(int, s.split())
+
+
+def print_grid(grid, default="."):
+    if not grid:
+        return
+
+    min_x = min(position.x for position in grid)
+    max_x = max(position.x for position in grid)
+    min_y = min(position.y for position in grid)
+    max_y = max(position.y for position in grid)
+
+    for y in range(min_y, max_y + 1):
+        print("".join(grid.get(Vector2(x, y), default) for x in range(min_x, max_x + 1)))
