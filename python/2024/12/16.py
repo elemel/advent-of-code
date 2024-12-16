@@ -1,4 +1,4 @@
-from sys import stdin, maxsize
+from sys import stdin
 from pyule import parse_grid, Vector2, dijkstra, get_ancestors
 
 
