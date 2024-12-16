@@ -1,6 +1,5 @@
 from sys import stdin, maxsize
 from pyule import parse_grid, Vector2, dijkstra, get_ancestors
-from functools import cache
 
 
 def main():
@@ -9,7 +8,6 @@ def main():
     [start] = [position for position, char in grid.items() if char == "S"]
     [end] = [position for position, char in grid.items() if char == "E"]
 
-    @cache
     def graph(state):
         position, direction = state
         result = {}
@@ -22,8 +20,8 @@ def main():
 
         return result
 
-    goals = {(end, direction) for direction in Vector2.ORTHOGONAL_DIRECTIONS}
     distances, parents = dijkstra(graph, [(start, Vector2.EAST)])
+    goals = {(end, direction) for direction in Vector2.ORTHOGONAL_DIRECTIONS}
     min_distance = min(distances[goal] for goal in goals)
     print(min_distance)
 
