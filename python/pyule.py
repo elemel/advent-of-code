@@ -136,6 +136,9 @@ class Vector2:
     def sign(self) -> "Vector2":
         return Vector2(sign(self.x), sign(self.y))
 
+    def manhattan_length(self) -> int:
+        return abs(self.x) + abs(self.y)
+
 
 Vector2.ZERO = Vector2(0, 0)
 Vector2.ONE = Vector2(1, 1)
