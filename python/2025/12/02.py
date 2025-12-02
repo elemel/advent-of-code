@@ -1,20 +1,11 @@
 import sys
 
 
-def is_repeated(i):
-	s = str(i)
+def is_repeated(s):
+	i = len(s)
 
-	if len(s) == 1:
-		return False
-
-	for j in range(1, len(s)):
-		t = s[:j]
-		u = t
-
-		while len(u) < len(s):
-			u += t
-
-		if u == s:
+	for j in range(1, i // 2 + 1):
+		if s[:j] * (i // j) == s:
 			return True
 
 	return False
@@ -50,7 +41,9 @@ def solve_part_2(lines):
 			end = int(end_str)
 
 			for i in range(start, end + 1):
-				if is_repeated(i):
+				i_str = str(i)
+
+				if is_repeated(i_str):
 					result += i
 
 	return result
