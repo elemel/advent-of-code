@@ -3,12 +3,7 @@ import sys
 
 def is_repeated(s):
 	i = len(s)
-
-	for j in range(1, i // 2 + 1):
-		if s[:j] * (i // j) == s:
-			return True
-
-	return False
+	return any(s[:j] * (i // j) == s for j in range(1, i // 2 + 1))
 
 
 def solve_part_1(lines):
