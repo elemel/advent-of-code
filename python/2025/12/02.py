@@ -44,7 +44,11 @@ def solve_part_2(lines):
     return result
 
 
-if __name__ == "__main__":
-    lines = list(sys.stdin)
+def main():
+    lines = [line.strip() for line in sys.stdin]
     print(solve_part_1(lines))
     print(solve_part_2(lines))
+
+
+if __name__ == "__main__":
+    main()
