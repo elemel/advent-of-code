@@ -1,6 +1,5 @@
 import sys
 
-
 NEIGHBOR_OFFSETS = [(dx, dy) for dy in [-1, 0, 1] for dx in [-1, 0, 1] if dx or dy]
 
 
@@ -36,13 +35,11 @@ def can_remove(grid, position):
 
 def solve_part_1(lines):
     grid = parse_grid(lines)
-
     return sum(can_remove(grid, position) for position in grid)
 
 
 def solve_part_2(lines):
     grid = parse_grid(lines)
-
     progress = True
     result = 0
 
