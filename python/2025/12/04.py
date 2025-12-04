@@ -40,17 +40,17 @@ def solve_part_1(lines):
 
 def solve_part_2(lines):
     grid = parse_grid(lines)
-    progress = True
+    done = False
     result = 0
 
-    while progress:
-        progress = False
+    while not done:
+        done = True
 
         for position in grid:
             if can_remove(grid, position):
                 grid[position] = "."
                 result += 1
-                progress = True
+                done = False
 
     return result
 
