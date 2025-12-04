@@ -1,39 +1,47 @@
 import sys
 
 
-def get_neighbor_positions(position):
-    x, y = position
-    return [(x + dx, y + dy) for dy in [-1, 0, 1] for dx in [-1, 0, 1] if dx or dy]
+NEIGHBOR_OFFSETS = [(dx, dy) for dy in [-1, 0, 1] for dx in [-1, 0, 1] if dx or dy]
 
 
-def can_access(grid, position):
-    return (
-        sum(
-            grid.get(neighbor_position) == "@"
-            for neighbor_position in get_neighbor_positions(position)
-        )
-        < 4
+def vec_add(a, b):
+    ax, ay = a
+    bx, by = b
+    return ax + bx, ay + by
+
+
+def parse_grid(lines):
+    grid = {}
+
+    for y, line in enumerate(lines):
+        for x, value in enumerate(line):
+            grid[x, y] = value
+
+    return grid
+
+
+def get_neighbors(grid, position):
+    for offset in NEIGHBOR_OFFSETS:
+        neighbor_position = vec_add(position, offset)
+
+        if neighbor_position in grid:
+            yield grid[neighbor_position]
+
+
+def can_remove(grid, position):
+    return grid[position] == "@" and (
+        sum(neighbor == "@" for neighbor in get_neighbors(grid, position)) < 4
     )
 
 
 def solve_part_1(lines):
-    grid = {}
+    grid = parse_grid(lines)
 
-    for y, line in enumerate(lines):
-        for x, value in enumerate(line):
-            grid[x, y] = value
-
-    return sum(
-        grid[position] == "@" and can_access(grid, position) for position in grid
-    )
+    return sum(can_remove(grid, position) for position in grid)
 
 
 def solve_part_2(lines):
-    grid = {}
-
-    for y, line in enumerate(lines):
-        for x, value in enumerate(line):
-            grid[x, y] = value
+    grid = parse_grid(lines)
 
     progress = True
     result = 0
@@ -42,7 +50,7 @@ def solve_part_2(lines):
         progress = False
 
         for position in grid:
-            if grid[position] == "@" and can_access(grid, position):
+            if can_remove(grid, position):
                 grid[position] = "."
                 result += 1
                 progress = True
