@@ -7,7 +7,13 @@ def get_neighbor_positions(position):
 
 
 def can_access(grid, position):
-    return sum(grid.get(neighbor_position) == "@" for neighbor_position in get_neighbor_positions(position)) < 4
+    return (
+        sum(
+            grid.get(neighbor_position) == "@"
+            for neighbor_position in get_neighbor_positions(position)
+        )
+        < 4
+    )
 
 
 def solve_part_1(lines):
@@ -17,7 +23,9 @@ def solve_part_1(lines):
         for x, value in enumerate(line):
             grid[x, y] = value
 
-    return sum(grid[position] == "@" and can_access(grid, position) for position in grid)
+    return sum(
+        grid[position] == "@" and can_access(grid, position) for position in grid
+    )
 
 
 def solve_part_2(lines):
