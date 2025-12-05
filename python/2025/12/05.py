@@ -1,48 +1,60 @@
 import sys
 
 
-def parse_range(line):
-    a, b = line.split("-")
-    return int(a), int(b)
+# Step must be 1
+def merge_ranges(ranges):
+    sorted_ranges = sorted(ranges, key=(lambda r: r.start))
+    result = []
+
+    if not sorted_ranges:
+        return result
+
+    last = sorted_ranges[0]
+
+    if last.step != 1:
+        raise ValueError("Step must be 1")
+
+    for current in sorted_ranges[1:]:
+        if current.step != 1:
+            raise ValueError("Step must be 1")
+
+        if last.stop < current.start:
+            # Disjoint
+            result.append(last)
+            last = current
+        elif last.stop < current.stop:
+            # Merge
+            last = range(last.start, current.stop)
+
+    result.append(last)
+    return result
+
+
+def parse_fresh_range(line):
+    start_str, stop_str = line.split("-")
+
+    start = int(start_str)
+    stop = int(stop_str)  # Inclusive
+
+    # In Python ranges, stop is excluded
+    return range(start, stop + 1)
 
 
 def parse_lines(lines):
     i = lines.index("")
-
-    ranges = [parse_range(line) for line in lines[:i]]
-    ingreds = [int(line) for line in lines[i + 1 :]]
-    return ranges, ingreds
+    fresh_ranges = [parse_fresh_range(line) for line in lines[:i]]
+    ingredients = [int(line) for line in lines[i + 1 :]]
+    return fresh_ranges, ingredients
 
 
 def solve_part_1(lines):
-    ranges, ingreds = parse_lines(lines)
-
-    count = 0
-
-    for ingred in ingreds:
-        for a, b in ranges:
-            if a <= ingred <= b:
-                count += 1
-                break
-
-    return count
+    fresh_ranges, ingredients = parse_lines(lines)
+    return sum(any(i in r for r in fresh_ranges) for i in ingredients)
 
 
 def solve_part_2(lines):
-    ranges, _ = parse_lines(lines)
-    sorted_ranges = sorted(ranges)
-
-    count = 0
-    last_b = -1
-
-    for a, b in sorted_ranges:
-        a = max(a, last_b + 1)
-        b = max(b, last_b)
-
-        count += b - a + 1
-        last_b = b
-
-    return count
+    fresh_ranges, _ = parse_lines(lines)
+    return sum(len(r) for r in merge_ranges(fresh_ranges))
 
 
 def main():
