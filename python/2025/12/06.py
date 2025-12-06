@@ -44,8 +44,10 @@ def solve_part_2(lines):
             elif operator == "*":
                 result += prod(numbers)
                 numbers = []
-            else:
+            elif operator == " ":
                 pass
+            else:
+                raise Exception()
 
     return result
 
