@@ -38,14 +38,14 @@ def solve_part_2(lines):
             number = int(number_str)
             numbers.append(number)
 
-            if operator == "+":
+            if operator == " ":
+                pass
+            elif operator == "+":
                 result += sum(numbers)
                 numbers = []
             elif operator == "*":
                 result += prod(numbers)
                 numbers = []
-            elif operator == " ":
-                pass
             else:
                 raise Exception()
 
