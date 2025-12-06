@@ -1,12 +1,11 @@
 import sys
 from math import prod
 
+
 def solve_part_1(lines):
     number_lines = [[int(s) for s in line.split()] for line in lines[:-1]]
     operator_line = lines[-1].split()
-
     transposed_number_lines = list(zip(*number_lines))
-
     result = 0
 
     for operator, operands in zip(operator_line, transposed_number_lines):
